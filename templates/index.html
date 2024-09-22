@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzón Seguro de Revisión</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Buzón Seguro de Revisión de Ensayos</h1>
+        <form id="review-form" action="/submit" method="POST">
+            <label for="essay">Escribe o pega tu ensayo aquí:</label><br>
+            <textarea id="essay" name="essay" rows="10" cols="50" placeholder="Escribe tu texto aquí..." required></textarea><br><br>
+            <button type="submit">Enviar para revisión</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Envío del formulario usando AJAX para no recargar la página
+        const form = document.getElementById('review-form');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/submit', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = result.message || "Revisión completada.";
+        });
+    </script>
+</body>
+</html>
