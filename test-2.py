@@ -39,14 +39,21 @@ def submit():
     ]
 
     # Ejecutar el modelo para revisar el ensayo
-    result = run_model("@cf/meta/llama-3-8b-instruct", inputs, timeout=15)
+    result = run_model("@cf/meta/llama-3-8b-instruct", inputs, timeout=1200)
+    print("Resultado de la IA:", result)  # Verifica lo que devuelve la API
 
     # Revisar el resultado
     if 'error' in result:
         return jsonify({"message": "Error al procesar la solicitud: " + result['error']})
-    else:
-        # Devolver el contenido revisado al usuario
-        return jsonify({"message": "Revisión completada con éxito", "response": result})
+    
+    # Extraer el contenido revisado de la IA
+    try:
+        ai_response = result['content']  # Ajusta según la estructura de la respuesta
+    except KeyError:
+        return jsonify({"message": "Error al procesar la respuesta de la IA."})
+
+    # Devolver el contenido revisado al usuario
+    return jsonify({"message": "Revisión completada con éxito", "response": ai_response})
 
 # Ruta para servir la página principal
 @app.route('/')
